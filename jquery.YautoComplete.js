@@ -1,9 +1,15 @@
 /**
- * [description]
- * @param  {[type]} $ [description]
- * @return {[type]}   [description]
+ * autocomplete 
+ * @param  {object} options
+ *   {string} containerClass  
+ *   {string} selectedClass 
+ *   {array} source 
+ *   {string} sourceUrl 
+ *   {string} itemTag 
+ *   {number} bounce 
+ * @author  yorsal
  */
-(function($) {
+;(function($) {
 
     $.fn.YautoComplete = function(options) {
         var defaultVal = {
@@ -19,11 +25,12 @@
             timer;
 
         /**
-         * [init description]
-         * @param  {[type]} self [description]
-         * @return {[type]}      [description]
+         * initialize the layout.
+         * @param  {object} self
+         * @return 
          */
-        function init(self) {
+        function init(self) 
+        {
 
             var containerTpl = $('<div class="' + options.containerClass + '"></div>');
 
@@ -41,28 +48,35 @@
             self.after(containerTpl);
 
 
-        };
+        }
 
-        function keyEnterHandler(self) {
+        function keyEnterHandler(self) 
+        {
             var container = self.next(),
                 value = container.find('.' + options.selectedClass).text();
             self.val(value);
             container.html('');
         }
 
-        function keyUpDownHandler(self, item) {
-            var container = self.next();
+        function keyUpDownHandler(self, item) 
+        {
 
-            container.find('.' + options.selectedClass).removeClass('selected');
+            if (item.is(options.itemTag))
+            {
+                var container = self.next();
 
-            item.addClass('selected');
+                container.find('.' + options.selectedClass).removeClass('selected');
 
-            self.val(item.text());
+                item.addClass('selected');
 
+                self.val(item.text());
+
+            }
 
         }
 
-        function renderList(self) {
+        function renderList(self) 
+        {
 
             var tpl = '',
                 container = self.next(),
@@ -97,7 +111,8 @@
 
         }
 
-        function renderHandle(data, self, searchFlag) {
+        function renderHandle(data, self, searchFlag) 
+        {
 
             var tpl = '',
                 index = 0,
@@ -107,15 +122,19 @@
             for (var i = 0; i < data.length; i++) {
                 var dataValue = data[i].value + '';
 
-                if (searchFlag) {
-                    if (dataValue.indexOf(inputValue) != -1) {
+                if (searchFlag) 
+                {
+                    if (dataValue.indexOf(inputValue) != -1) 
+                    {
                         var selectedClass = '';
                         if (index == 0) selectedClass = options.selectedClass;
                         tpl += '<' + options.itemTag + ' class="' + selectedClass + '">' + dataValue + '</' + options.itemTag + '>';
                         index++;
                     }
 
-                } else {
+                } 
+                else 
+                {
                     var selectedClass = '';
                     if (i == 0) selectedClass = options.selectedClass;
                     tpl += '<' + options.itemTag + ' class="' + selectedClass + '">' + dataValue + '</' + options.itemTag + '>';
@@ -133,21 +152,27 @@
             init(self);
 
             $(document).on('keyup', function(e) {
-                if (e.keyCode == '13') { //回车
+                if (e.which == 13) 
+                { //回车
                     keyEnterHandler(self);
                 }
             });
 
             self.on('propertychange, keyup', function(e) { //绑定input输入事件
 
-                if (e.keyCode == '38') { //up
+                if (e.which == 38) 
+                { //up
                     keyUpDownHandler(self, self.next().find('.' + options.selectedClass).prev());
-                } else if (e.keyCode == '40') { //down
+                } 
+                else if (e.which == 40) 
+                { //down
                     keyUpDownHandler(self, self.next().find('.' + options.selectedClass).next());
-                } else if (e.keyCode == '13') //回车
+                } 
+                else if (e.which == 13) //回车
                 {
                     return;
-                } else //render
+                } 
+                else //render
                 {
                     renderList(self);
                 }
