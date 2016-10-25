@@ -18,6 +18,7 @@
             selectedClass: 'selected',
             source: [],
             sourceUrl: 'data.php',
+            sourceCallback: function(){},
             itemTag: 'a',
             bounce: 300
         };　　
@@ -77,7 +78,6 @@
 
         function renderList(self) 
         {
-
             var tpl = '',
                 container = self.next(),
                 source = options.source;
@@ -96,6 +96,7 @@
                             success: function(res) {
                                 renderHandle(res, self);
                                 source();
+                                options.sourceCallback();
                             }
                         });
                     }, options.bounce);
@@ -140,7 +141,6 @@
                     tpl += '<' + options.itemTag + ' class="' + selectedClass + '">' + dataValue + '</' + options.itemTag + '>';
                 }
             }
-
             container.html(tpl);
         }
 
@@ -159,7 +159,7 @@
             });
 
             self.on('propertychange, keyup', function(e) { //绑定input输入事件
-
+                //console.log(e.which);
                 if (e.which == 38) 
                 { //up
                     keyUpDownHandler(self, self.next().find('.' + options.selectedClass).prev());
